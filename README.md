@@ -8,4 +8,7 @@ pip install Flask
 pip install Flask-RESTful
 
 pip install Flask-JWT
+
+pip install Flask-SQLAlchemy
+
  # restAPI2-SQLA 
