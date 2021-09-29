@@ -1,6 +1,6 @@
 
 from flask_restful import Resource, Api, reqparse
-from flask_jwt import JWT, jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from sqlalchemy.orm import query
 from models.item import ItemModel
 
@@ -19,7 +19,7 @@ class Item(Resource):
         )
 
     @jwt_required()
-    def get(self,name):
+    def get(self, name):
 
             item = ItemModel.find_by_name(name)
             if item:
@@ -41,8 +41,12 @@ class Item(Resource):
                 return {"message":"An error ocurred inserting the item"}, 500
            
             return item.json(), 201
-
+    
+    @jwt_required()
     def delete(self,name):
+            claims = get_jwt()
+            if not claims==['is_admin']:
+                return {'message':'Admin previlege required'}
             item = ItemModel.find_by_name(name)
             if item:
                 item.delete_from_db()
